@@ -1,6 +1,6 @@
-module github.com/mamj00/tf/custom_rules/tflint-ruleset-azure
+module github.com/mamj00/tf
 
-go 1.23.6
+go 1.23
 
 require (
 	github.com/Azure/azure-sdk-for-go/sdk/azcore v1.17.0

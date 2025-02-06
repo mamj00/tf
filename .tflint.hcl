@@ -6,7 +6,7 @@ plugin "azurerm" {
 
 plugin "cloudima" {
   enabled = true
-  version = "0.1.0"
+  version = "0.1.1"
   source = "github.com/mamj00/tf"
 }
 
