@@ -1,4 +1,4 @@
-module github.com/mamj00/tf
+module cloudima
 
 go 1.23
 
