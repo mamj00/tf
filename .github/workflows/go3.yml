@@ -1,0 +1,35 @@
+name: Release
+
+on:
+  push:
+    tags:
+      - 'v*'
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v3
+      
+      - name: Set up Go
+        uses: actions/setup-go@v4
+        with:
+          go-version: '1.23'
+          
+      - name: Build
+        run: |
+          GOOS=linux GOARCH=amd64 go build -o tflint-ruleset-azure_linux_amd64
+          GOOS=darwin GOARCH=amd64 go build -o tflint-ruleset-azure_darwin_amd64
+          GOOS=windows GOARCH=amd64 go build -o tflint-ruleset-azure_windows_amd64.exe
+          
+      - name: Generate checksums
+        run: sha256sum tflint-ruleset-azure_* > checksums.txt
+        
+      - name: Create Release
+        uses: softprops/action-gh-release@v1
+        with:
+          files: |
+            tflint-ruleset-azure_linux_amd64
+            tflint-ruleset-azure_darwin_amd64
+            tflint-ruleset-azure_windows_amd64.exe
+            checksums.txt
