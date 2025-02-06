@@ -3,7 +3,7 @@ package main
 import (
     "github.com/terraform-linters/tflint-plugin-sdk/plugin"
     "github.com/terraform-linters/tflint-plugin-sdk/tflint"
-    "./rules"
+    "github.com/mamj00/tf/custom_rules/tflint-ruleset-azure/rules"
 )
 
 func main() {
@@ -12,7 +12,7 @@ func main() {
             Name:    "template",
             Version: "0.1.0",
             Rules: []tflint.Rule{
-                &rules.AzureGatewayInvalidSKU{},  // Fixed initialization
+                &rules.AzureGatewayValidSKU{},  // Fixed initialization
             },
         },
     })

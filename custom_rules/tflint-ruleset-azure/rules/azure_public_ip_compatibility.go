@@ -1,33 +1,17 @@
 package rules
 
 import (
-    "context"
     "strings"
-    
     "github.com/terraform-linters/tflint-plugin-sdk/hclext"
-    "github.com/terraform-linters/tflint-plugin-sdk/tflint"
-    "./apis/azure" // Ruta local corregida
-)
+    "github.com/terraform-linters/tflint-plugin-sdk/tflint")
 
-type AzureGatewayValidSKU struct {
+type AzurePublicIPCompatibility struct {
     tflint.DefaultRule
-}
+} // Llave faltante
 
-// Métodos corregidos con llaves de cierre
-func (r *AzureGatewayValidSKU) Name() string {
-    return "azure_gateway_valid_sku"
-}
-
-func (r *AzureGatewayValidSKU) Enabled() bool {
-    return true
-}
-
-func (r *AzureGatewayValidSKU) Severity() tflint.Severity {
-    return tflint.ERROR
-}
-
-func (r *AzureGatewayValidSKU) Link() string {
-    return "https://learn.microsoft.com/azure/vpn-gateway/vpn-gateway-about-vpngateways"
+// Métodos completos con llaves
+func (r *AzurePublicIPCompatibility) Enabled() bool {
+    return true // Habilitar la regla
 }
 
 func (r *AzurePublicIPCompatibility) Check(runner tflint.Runner) error {
@@ -67,11 +51,6 @@ func (r *AzurePublicIPCompatibility) Check(runner tflint.Runner) error {
         }
 
         for _, config := range ipConfigs {
-            pipID, ok := config["public_ip_address_id"].(string)
-            if !ok {
-                continue
-            }
-
             pipResource, err := runner.GetResourceContent("azurerm_public_ip", &hclext.BodySchema{
                 Attributes: []hclext.AttributeSchema{{Name: "sku"}},
             }, nil)

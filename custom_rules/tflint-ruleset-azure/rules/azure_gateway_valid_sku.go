@@ -2,12 +2,12 @@
 package rules
 
 import (
-    "context"
     "strings"
-    
+    "context"
     "github.com/terraform-linters/tflint-plugin-sdk/hclext"
     "github.com/terraform-linters/tflint-plugin-sdk/tflint"
-    "./apis/azure"
+    "github.com/mamj00/tf/custom_rules/tflint-ruleset-azure/apis/azure"
+    "github.com/Azure/azure-sdk-for-go/sdk/resourcemanager/compute/armcompute/v5"
 )
 
 type AzureGatewayValidSKU struct {

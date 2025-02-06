@@ -19,7 +19,7 @@ plugin "template" {
   enabled = true
 
   version = "0.1.0"
-  source  = "github.com/terraform-linters/tflint-ruleset-template"
+  source  = "github.com/mamj00/tf/custom_rules/tflint-ruleset-azure/rules"
 
   signing_key = <<-KEY
   -----BEGIN PGP PUBLIC KEY BLOCK-----
