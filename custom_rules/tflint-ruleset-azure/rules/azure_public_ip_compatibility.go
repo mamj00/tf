@@ -7,11 +7,22 @@ import (
 
 type AzurePublicIPCompatibility struct {
     tflint.DefaultRule
-} // Llave faltante
+} // <-- Añadir llave faltante
 
-// Métodos completos con llaves
+func (r *AzurePublicIPCompatibility) Name() string {
+    return "azure_public_ip_compatibility"
+} // <-- Añadir llave
+
 func (r *AzurePublicIPCompatibility) Enabled() bool {
-    return true // Habilitar la regla
+    return true
+} // <-- Añadir llave
+
+func (r *AzurePublicIPCompatibility) Severity() tflint.Severity {
+    return tflint.ERROR
+} // <-- Añadir llave
+
+func (r *AzurePublicIPCompatibility) Link() string {
+    return "https://learn.microsoft.com/azure/virtual-network/ip-services/public-ip-addresses"
 }
 
 func (r *AzurePublicIPCompatibility) Check(runner tflint.Runner) error {
@@ -51,9 +62,11 @@ func (r *AzurePublicIPCompatibility) Check(runner tflint.Runner) error {
         }
 
         for _, config := range ipConfigs {
-            pipResource, err := runner.GetResourceContent("azurerm_public_ip", &hclext.BodySchema{
-                Attributes: []hclext.AttributeSchema{{Name: "sku"}},
-            }, nil)
+            // Eliminar pipID si no se usa
+            _, exists := config["public_ip_address_id"]
+            if !exists {
+                continue
+            }
             if err != nil {
                 return err
             }

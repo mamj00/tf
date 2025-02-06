@@ -7,7 +7,6 @@ import (
     "github.com/terraform-linters/tflint-plugin-sdk/hclext"
     "github.com/terraform-linters/tflint-plugin-sdk/tflint"
     "github.com/mamj00/tf/custom_rules/tflint-ruleset-azure/apis/azure"
-    "github.com/Azure/azure-sdk-for-go/sdk/resourcemanager/compute/armcompute/v5"
 )
 
 type AzureGatewayValidSKU struct {
@@ -34,6 +33,7 @@ func (r *AzureGatewayValidSKU) Check(runner tflint.Runner) error {
     ctx := context.Background()
     subscriptionID := runner.AzureCredentials().SubscriptionID
     
+    subscriptionID := os.Getenv("ARM_SUBSCRIPTION_ID") // Obtener de variables de entorno
     client, err := azure.NewClient(subscriptionID)
     if err != nil {
         return err
