@@ -3,7 +3,8 @@ package azure
 import (
     "context"
     "github.com/Azure/azure-sdk-for-go/sdk/azidentity"
-    "github.com/Azure/azure-sdk-for-go/sdk/resourcemanager/compute/armcompute/v5" // Usar armcompute
+    "github.com/Azure/azure-sdk-for-go/sdk/resourcemanager/compute/armcompute/v5"
+	"github.com/Azure/azure-sdk-for-go/sdk/azcore/to"
 )
 
 type Client struct {
@@ -27,7 +28,7 @@ func (c *Client) GetValidSKUs(ctx context.Context, location string) (map[string]
     skus := make(map[string]bool)
     
     pager := c.SKUClient.NewListPager(&armcompute.ResourceSKUsClientListOptions{
-        Filter: to.Ptr("location eq '" + location + "'"), // Filtro por ubicación
+        Filter: to.Ptr("location eq '" + location + "'"), // Usar to.Ptr
     })
     
     for pager.More() {
