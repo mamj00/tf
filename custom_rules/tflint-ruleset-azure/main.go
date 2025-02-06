@@ -9,11 +9,11 @@ import (
 func main() {
     plugin.Serve(&plugin.ServeOpts{
         RuleSet: &tflint.BuiltinRuleSet{
-            Name:    "template",
+            Name:    "cloudima",
             Version: "0.1.0",
             Rules: []tflint.Rule{
                 &rules.AzureGatewayValidSKU{},
-				&AzurePublicIPCompatibility{},
+				&rules.AzurePublicIPCompatibility{},
             },
         },
     })
