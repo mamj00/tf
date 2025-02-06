@@ -1,12 +1,8 @@
-// tflint-ruleset-azurerm-custom/rules/azure_gateway_valid_sku.go
 package rules
 
 import (
-    "strings"
-    "context"
     "github.com/terraform-linters/tflint-plugin-sdk/hclext"
     "github.com/terraform-linters/tflint-plugin-sdk/tflint"
-    "github.com/mamj00/tf/custom_rules/tflint-ruleset-azure/apis/azure"
 )
 
 type AzureGatewayValidSKU struct {
@@ -30,21 +26,14 @@ func (r *AzureGatewayValidSKU) Link() string {
 }
 
 func (r *AzureGatewayValidSKU) Check(runner tflint.Runner) error {
-    ctx := context.Background()
-    subscriptionID := runner.AzureCredentials().SubscriptionID
-    
-    subscriptionID := os.Getenv("ARM_SUBSCRIPTION_ID") // Obtener de variables de entorno
-    client, err := azure.NewClient(subscriptionID)
-    if err != nil {
-        return err
+    allowedSKUs := map[string]bool{
+        "VpnGw1AZ": true, "VpnGw2AZ": true, "VpnGw3AZ": true,
+        "VpnGw4AZ": true, "VpnGw5AZ": true,
+        "VpnGw1": true, "VpnGw2": true, "VpnGw3": true, "VpnGw4": true, "VpnGw5": true,
     }
 
     resources, err := runner.GetResourceContent("azurerm_virtual_network_gateway", &hclext.BodySchema{
-        Attributes: []hclext.AttributeSchema{
-            {Name: "sku"}, 
-            {Name: "location"},
-            {Name: "type"},
-        },
+        Attributes: []hclext.AttributeSchema{{Name: "sku"}},
     }, nil)
     if err != nil {
         return err
@@ -56,39 +45,18 @@ func (r *AzureGatewayValidSKU) Check(runner tflint.Runner) error {
             continue
         }
 
-        locationAttr, exists := resource.Body.Attributes["location"]
-        if !exists {
-            continue
-        }
-
-        var sku, location string
+        var sku string
         if err := runner.EvaluateExpr(skuAttr.Expr, &sku, nil); err != nil {
             return err
         }
-        if err := runner.EvaluateExpr(locationAttr.Expr, &location, nil); err != nil {
-            return err
-        }
 
-        validSKUs, err := client.GetValidSKUs(ctx, location)
-        if err != nil {
-            return err
-        }
-
-        if !validSKUs[sku] {
+        if !allowedSKUs[sku] {
             runner.EmitIssue(
                 r,
-                "SKU inválido para "+location+". Válidos: "+strings.Join(getKeys(validSKUs), ", "),
+                "SKU inválido para Azure Gateway. Válidos: VpnGw1-5 o VpnGw1AZ-5AZ",
                 skuAttr.Expr.Range(),
             )
         }
     }
     return nil
-}
-
-func getKeys(m map[string]bool) []string {
-    keys := make([]string, 0, len(m))
-    for k := range m {
-        keys = append(keys, k)
-    }
-    return keys
 }

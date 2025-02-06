@@ -7,3 +7,11 @@ plugin "azurerm" {
 plugin "template" {
   enabled = true
 }
+
+rule "azure_gateway_valid_sku" {
+  enabled = true
+}
+
+rule "azure_public_ip_compatibility" {
+  enabled = true
+}

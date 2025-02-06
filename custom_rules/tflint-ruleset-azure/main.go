@@ -12,7 +12,8 @@ func main() {
             Name:    "template",
             Version: "0.1.0",
             Rules: []tflint.Rule{
-                &rules.AzureGatewayValidSKU{},  // Fixed initialization
+                &rules.AzureGatewayValidSKU{},
+				&AzurePublicIPCompatibility{},
             },
         },
     })
