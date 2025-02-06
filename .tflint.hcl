@@ -8,6 +8,7 @@ plugin "cloudima" {
   enabled = true
   version = "0.1.1"
   source = "github.com/mamj00/tf"
+  signing_key = ""
 }
 
 rule "azure_gateway_valid_sku" {
